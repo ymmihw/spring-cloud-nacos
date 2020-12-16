@@ -1,44 +1,38 @@
 package com.ymmihw.spring.cloud.nacos;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
-import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import lombok.RequiredArgsConstructor;
 
 @SpringBootApplication
 @EnableDiscoveryClient
 public class NacosConsumerApplication {
-
-  @LoadBalanced
-  @Bean
-  public RestTemplate restTemplate() {
-    return new RestTemplate();
-  }
-
   public static void main(String[] args) {
     SpringApplication.run(NacosConsumerApplication.class, args);
   }
 
   @RestController
+  @RequiredArgsConstructor
   public class TestController {
 
-    private final RestTemplate restTemplate;
+    private final RestTemplate httpRestTemplate;
+    private final RestTemplate httpsRestTemplate;
 
-    @Autowired
-    public TestController(RestTemplate restTemplate) {
-      this.restTemplate = restTemplate;
+    @RequestMapping(value = "/http/{str}", method = RequestMethod.GET)
+    public String http(@PathVariable String str) {
+      return httpRestTemplate.getForObject("http://service-provider/config/get", String.class);
     }
 
-    @RequestMapping(value = "/echo/{str}", method = RequestMethod.GET)
-    public String echo(@PathVariable String str) {
-      return restTemplate.getForObject("http://service-provider/config/get", String.class);
+    @RequestMapping(value = "/https/{str}", method = RequestMethod.GET)
+    public String https(@PathVariable String str) {
+      return httpsRestTemplate.getForObject("https://service-provider-https/config/get",
+          String.class);
     }
   }
 }

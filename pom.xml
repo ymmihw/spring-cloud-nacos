@@ -45,5 +45,6 @@
   <module>spring-cloud-nacos-provider</module>
   <module>spring-cloud-nacos-consumer</module>
   <module>spring-cloud-nacos-provider-https</module>
+  <module>spring-cloud-nacos-reload-logback</module>
  </modules>
 </project>

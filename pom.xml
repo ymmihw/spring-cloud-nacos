@@ -44,5 +44,6 @@
  <modules>
   <module>spring-cloud-nacos-provider</module>
   <module>spring-cloud-nacos-consumer</module>
+  <module>spring-cloud-nacos-provider-https</module>
  </modules>
 </project>
